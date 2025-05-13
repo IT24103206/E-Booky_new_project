@@ -1,7 +1,6 @@
 package org.example.ebooky_new_project.controllers;
 
 
-import org.example.ebooky_new_project.model.Booking;
 import org.example.ebooky_new_project.service.BookingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

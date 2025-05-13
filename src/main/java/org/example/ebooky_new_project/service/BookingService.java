@@ -3,7 +3,6 @@ package org.example.ebooky_new_project.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
-import org.example.ebooky_new_project.model.Booking;
 import org.springframework.stereotype.Service;
 
 
