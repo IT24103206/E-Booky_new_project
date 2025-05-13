@@ -90,13 +90,13 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public Boolean deleteBook(int Id) {
+    public Boolean deleteBook(int id) {
         List<Book> books = getAllBook();
         boolean isRemoved = false;
         try {
             // Remove book with matching ID
             for (Book b : books) {
-                if (b.getBookId() == Id) {
+                if (b.getBookId() == id) {
                     books.remove(b);
                     isRemoved = true;
                     break;
