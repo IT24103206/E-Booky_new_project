@@ -53,4 +53,6 @@ public class Book {
 
     public String getCoverPage() { return coverPage; }
     public void setCoverPage(String coverPage) { this.coverPage = coverPage; }
+
+
 }
