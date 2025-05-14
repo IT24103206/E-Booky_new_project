@@ -1,6 +1,8 @@
 package org.example.ebooky_new_project.model;
 
 
+import java.util.Date;
+
 public class Purchasing {
     private int purchaseId;
     private User purchaseUser;
@@ -59,4 +61,4 @@ public class Purchasing {
     }
 }
 
-}
+
