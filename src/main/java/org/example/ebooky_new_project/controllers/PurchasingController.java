@@ -26,7 +26,8 @@ public class PurchasingController {
     @GetMapping("/purchasing/book/{id}")
     public List<Purchasing> getBookFeedback(@PathVariable int id) {
         Book book = new Book();
-        book.setBook
+        book.setBookId(id);
+        return service.getAllPurchasing(book);
     }
 
     @GetMapping("/purchasing/user/{id}")
