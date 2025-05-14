@@ -14,6 +14,8 @@ public class PurchasingServiceImpl implements PurchasingService {
     private final PurchasingRepository repository;
     public PurchasingServiceImpl(){
         this.repository = new PurchasingRepositoryImpl();
+
+
     }
 
     @Override
@@ -56,10 +58,6 @@ public class PurchasingServiceImpl implements PurchasingService {
 
     @Override
     public Optional<Purchasing> updatePurchasing(Purchasing purchasing) {
-
         return null;
     }
 }
-
-
-
