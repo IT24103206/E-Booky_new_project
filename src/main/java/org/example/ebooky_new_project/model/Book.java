@@ -2,6 +2,7 @@ package org.example.ebooky_new_project.model;
 
 import java.util.Date;
 
+
 public class Book {
     private int bookId;
     private String title;
@@ -54,5 +55,6 @@ public class Book {
     public String getCoverPage() { return coverPage; }
     public void setCoverPage(String coverPage) { this.coverPage = coverPage; }
 
-
 }
+
+
