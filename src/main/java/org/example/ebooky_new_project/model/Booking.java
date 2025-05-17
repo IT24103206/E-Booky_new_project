@@ -1,40 +1,83 @@
 package org.example.ebooky_new_project.model;
 
+import java.util.Date;
+
 public class Booking {
-    private int id;
-    private String title;
-    private String author;
-    private int price;
-    private String rating;
-    private String image;
-    private String description;
+    private int bookingId;
+    private PrintedBook book;
+    private RegularUser user;
+    private Date bookingDate;
+    private Date reserveDate;
+    private boolean isPicked;
 
-    // Constructors
-    public Booking() {}
-
-    public Booking(int id, String title, String author, int price, String rating, String image, String description) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.price = price;
-        this.rating = rating;
-        this.image = image;
-        this.description = description;
+    public Booking(){}
+    public static class PrintedBook {
+        public int getBookId() {
+            return getBookId();
+        }
+    }
+    public Booking(PrintedBook book,RegularUser user,Date bookingDate,Date reserveDate,boolean isPicked){
+        this.book = book;
+        this.user = user;
+        this.bookingDate = bookingDate;
+        this.reserveDate= reserveDate;
+        this.isPicked = isPicked;
+    }
+    public Booking(int bookingId,PrintedBook book,RegularUser user,Date bookingDate,Date reserveDate){
+        this.bookingId = bookingId;
+        this.book = book;
+        this.user = user;
+        this.bookingDate = bookingDate;
+        this.reserveDate= reserveDate;
     }
 
-    // Getters and Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-    public String getAuthor() { return author; }
-    public void setAuthor(String author) { this.author = author; }
-    public int getPrice() { return price; }
-    public void setPrice(int price) { this.price = price; }
-    public String getRating() { return rating; }
-    public void setRating(String rating) { this.rating = rating; }
-    public String getImage() { return image; }
-    public void setImage(String image) { this.image = image; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+
+    public int getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(int bookingId) {
+        this.bookingId = bookingId;
+    }
+
+    public PrintedBook getBook() {
+        return book;
+    }
+
+    public void setBook(PrintedBook book) {
+        this.book = book;
+    }
+
+    public RegularUser getUser() {
+        return user;
+    }
+
+    public void setUser(RegularUser user) {
+        this.user = user;
+    }
+
+    public Date getBookingDate() {
+        return bookingDate;
+    }
+
+    public void setBookingDate(Date bookingDate) {
+        this.bookingDate = bookingDate;
+    }
+
+    public Date getReserveDate() {
+        return reserveDate;
+    }
+
+    public void setReserveDate(Date reserveDate) {
+        this.reserveDate = reserveDate;
+    }
+
+    public boolean isPicked() {
+        return isPicked;
+    }
+
+    public void setPicked(boolean picked) {
+        isPicked = picked;
+    }
 }
+
