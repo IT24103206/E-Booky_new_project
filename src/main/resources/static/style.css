@@ -1,0 +1,72 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    width: 100%;
+    height: 250px; /* 1/3 of the screen height */
+    background-image: url('bg.jpg'); /* Replace with your image URL */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 1;
+
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    background-color: #007bff;
+    color: white;
+    border-radius: 10px 10px 0 0 !important;
+}
+
+.feedback-item {
+    border-left: 4px solid #007bff;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.feedback-item .rating {
+    font-weight: bold;
+    color: #ffc107;
+}
+
+.feedback-item .user {
+    font-style: italic;
+    color: #6c757d;
+}
+
+.feedback-item .book {
+    font-weight: bold;
+    color: #28a745;
+}
+
+.alert {
+    margin-top: 20px;
+}
+
+.my-4 {
+    text-decoration: none;
+    font-weight: bold;
+    font-family: josefin-sanf;
+    color: white;
+    text-shadow: 1px 1px 2px red, 2px 2px 3px blue, 3px 3px 4px green;
+
+}
