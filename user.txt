@@ -1,5 +1,4 @@
-{"@type":"AdminUser","userId":1,"firstName":"Hansaka","lastName":"Ravishan","email":"hansakaravi0211111@gmail.com","password":"hansaka12345","adminRole":"userManagement"}
-{"@type":"RegularUser","userId":1,"firstName":"venushi","lastName":"jayananda","email":"ranmg@gmail.com","password":"dfgftry576"}
+{"@type":"AdminUser","userId":1,"firstName":"venushi","lastName":"jayananda","email":"venujaya@gmail.com","password":"venushi12345","adminRole":"userManagement"}
 {"@type":"RegularUser","userId":2,"firstName":"kavindi","lastName":"rajamanthree","email":"kavindi@gmail.com","password":"2468abcd"}
 {"@type":"RegularUser","userId":3,"firstName":"dinali","lastName":"ahangama","email":"dinali@gmail.com","password":"1234"}
 {"@type":"RegularUser","userId":4,"firstName":"dinuri","lastName":"wickkramarathne","email":"dinuri@gmail.com","password":"246"}
