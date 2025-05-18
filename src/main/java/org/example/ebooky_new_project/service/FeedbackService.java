@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface FeedbackService {
     List<Feedback> getAllFeedback();
-    List<Feedback> getAllFeedback(Book book);
+    List<Feedback> getAllFeedback(int id);
     List<Feedback> getAllFeedback(User user);
     Optional<Feedback> addFeedback(Feedback feedback);
     Optional<Feedback> updateFeedback(Feedback feedback);

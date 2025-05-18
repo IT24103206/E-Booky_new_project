@@ -1,6 +1,5 @@
 package org.example.ebooky_new_project.service;
 
-import org.example.ebooky_new_project.model.Book;
 import org.example.ebooky_new_project.model.Feedback;
 import org.example.ebooky_new_project.model.User;
 import org.example.ebooky_new_project.repository.FeedbackRepository;
@@ -22,14 +21,15 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public List<Feedback> getAllFeedback() {
         return repository.getAllFeedback();
+
     }
 
     @Override
-    public List<Feedback> getAllFeedback(Book book) {
+    public List<Feedback> getAllFeedback(int id) {
         List<Feedback> bookFeedbacks = new ArrayList<>();
 
-        for(Feedback f: feedbackList){
-            if(f.getBook().getBookId()==book.getBookId()){
+        for(Feedback f: repository.getAllFeedback()){
+            if(f.getBook().getBookId()==id){
                 bookFeedbacks.add(f);
             }
         }
@@ -46,6 +46,7 @@ public class FeedbackServiceImpl implements FeedbackService {
             }
         }
         return userFeedback;
+
     }
 
     @Override
@@ -55,6 +56,7 @@ public class FeedbackServiceImpl implements FeedbackService {
             return Optional.of(createFeedback);
         }
         return Optional.empty();
+
     }
 
     @Override

@@ -1,5 +1,7 @@
 package org.example.ebooky_new_project.controllers;
 
+
+
 import org.example.ebooky_new_project.model.*;
 import org.example.ebooky_new_project.service.FeedbackService;
 import org.example.ebooky_new_project.service.FeedbackServiceImpl;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+
 @RestController
 public class FeedbackController {
     private final FeedbackService service;
@@ -29,10 +32,7 @@ public class FeedbackController {
 
     @GetMapping("/feedback/book/{id}")
     public List<Feedback> getBookFeedback(@PathVariable int id){
-        Book book = new Ebook();
-        book.setBookId(id);
-
-        return service.getAllFeedback(book);
+        return service.getAllFeedback(id);
     }
 
     @PostMapping("/feedback")
@@ -40,5 +40,3 @@ public class FeedbackController {
         return service.addFeedback(feedback);
     }
 }
-
-

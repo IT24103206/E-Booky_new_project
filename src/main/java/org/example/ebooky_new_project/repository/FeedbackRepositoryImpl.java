@@ -1,5 +1,6 @@
 package org.example.ebooky_new_project.repository;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.ebooky_new_project.model.Feedback;
 
@@ -25,7 +26,7 @@ public class FeedbackRepositoryImpl implements FeedbackRepository{
         List<Feedback> feedbacks = new ArrayList<>();
         try{
             if(file.length()>0){
-                feedbacks = mapper.readValue(file,mapper.getTypeFactory().constructType(List.class,Feedback.class));
+                feedbacks = mapper.readValue(file, new TypeReference<List<Feedback>>() {});
             }
         }catch (Exception ex){
             ex.printStackTrace();
