@@ -1,65 +1,51 @@
 package org.example.ebooky_new_project.controllers;
 
-import org.example.ebooky_new_project.model.Booking;
+
 import org.example.ebooky_new_project.model.Booking;
 import org.example.ebooky_new_project.service.BookingService;
-import org.springframework.http.ResponseEntity;
+import org.example.ebooky_new_project.service.BookingServiceImpl;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
-//@RestController
-//@RequestMapping("/api/books")
-//public class BookingController {
-//    private final BookingService bookService;
-//
-//    public BookingController(BookingService bookService) {
-//        this.bookService = bookService;
-//    }
-//
-//    @GetMapping
-//    public ResponseEntity<List<Booking>> getAllBooks() {
-//        return ResponseEntity.ok(bookService.getAllBooks());
-//    }
-//
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Booking> getBookById(@PathVariable int id) {
-//        return bookService.getBookById(id)
-//                .map(ResponseEntity::ok)
-//                .orElse(ResponseEntity.notFound().build());
-//    }
-//
-//    @PostMapping
-//    public ResponseEntity<Booking> addBook(@RequestBody Booking book) {
-//        Booking savedBook = bookService.addBook(book);
-//        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-//                .path("/{id}")
-//                .buildAndExpand(savedBook.getId())
-//                .toUri();
-//        return ResponseEntity.created(location).body(savedBook);
-//    }
-//
-//    @PutMapping("/{id}")
-//    public ResponseEntity<Booking> updateBook(@PathVariable int id, @RequestBody Booking book) {
-//        return bookService.updateBook(id, book)
-//                .map(ResponseEntity::ok)
-//                .orElse(ResponseEntity.notFound().build());
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> deleteBook(@PathVariable int id) {
-//        return bookService.deleteBook(id)
-//                ? ResponseEntity.noContent().build()
-//                : ResponseEntity.notFound().build();
-//    }
-//
-//    @GetMapping("/search")
-//    public ResponseEntity<List<Booking>> searchBooks(
-//            @RequestParam(required = false) String title,
-//            @RequestParam(required = false) String author) {
-//        List<Booking> results = bookService.searchBooks(title, author);
-//        return ResponseEntity.ok(results);
-//    }
-//}
+@RestController
+public class BookingController {
+    private final BookingService service;
+    public BookingController(){
+        service = new BookingServiceImpl();
+    }
+
+    @GetMapping("/booking")
+    public List<Booking> getBooking(
+            @RequestParam(required = false) Integer userId,
+            @RequestParam(required = false) Integer bookId
+    ){
+        if(userId != null){
+            return service.getAllUserBooking(userId);
+        }
+        if(bookId != null){
+            return service.getAllBookBooking(bookId);
+        }
+        return service.getAllBooking();
+    }
+
+    @PostMapping("/booking")
+    public Optional<Booking> addBooking(@RequestBody Booking booking){
+        return service.addBooking(booking);
+    }
+
+    @PutMapping("/booking")
+    public Optional<Booking> updateBooking(@RequestBody Booking booking){
+        return service.updateBooking(booking);
+    }
+
+    @PatchMapping("/booking/change/{id}")
+    public boolean changeStatusBooking(@PathVariable int id){
+        return service.updateStatusBooking(id);
+    }
+    @DeleteMapping("/booking/delete/{id}")
+    public boolean deleteBooking(@PathVariable int id){
+        return service.deleteBooking(id);
+    }
+}

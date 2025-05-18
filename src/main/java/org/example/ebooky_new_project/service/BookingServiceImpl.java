@@ -35,7 +35,7 @@ public class BookingServiceImpl implements BookingService{
     public LinkedList<Booking> getAllBookBooking(int bookId) {
         LinkedList<Booking> resultList = new LinkedList<>();
         for(Booking b:repository.getAllBookings()){
-            if(b.getBook().getBookId()==bookId){
+            if(b.getBook().getBookId() == bookId){
                 resultList.add(b);
             }
         }

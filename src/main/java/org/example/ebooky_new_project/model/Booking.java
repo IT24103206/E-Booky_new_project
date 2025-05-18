@@ -11,11 +11,7 @@ public class Booking {
     private boolean isPicked;
 
     public Booking(){}
-    public static class PrintedBook {
-        public int getBookId() {
-            return getBookId();
-        }
-    }
+
     public Booking(PrintedBook book,RegularUser user,Date bookingDate,Date reserveDate,boolean isPicked){
         this.book = book;
         this.user = user;
