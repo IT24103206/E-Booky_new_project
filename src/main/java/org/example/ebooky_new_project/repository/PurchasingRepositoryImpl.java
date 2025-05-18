@@ -10,6 +10,7 @@ import java.util.List;
 public class PurchasingRepositoryImpl implements PurchasingRepository {
 
     private final File file = new File("purchasing.txt");
+    private final BookRepository bookRepository = new BookRepositoryImpl();
     public PurchasingRepositoryImpl(){
         if(!file.exists()){
             try{
@@ -36,6 +37,11 @@ public class PurchasingRepositoryImpl implements PurchasingRepository {
     @Override
     public Purchasing addPurchasing(Purchasing purchasing) {
         List<Purchasing> purchasingList = getAllPurchasing();
+        if(purchasing.getPurchaseBook() instanceof PrintedBook){
+            int bookCount = ((PrintedBook) purchasing.getPurchaseBook()).getAvailableStock();
+            ((PrintedBook) purchasing.getPurchaseBook()).setAvailableStock(bookCount-purchasing.getQuantity());
+            bookRepository.updateBook(purchasing.getPurchaseBook());
+        }
         ObjectMapper mapper = new ObjectMapper();
         purchasingList.add(purchasing);
         try{

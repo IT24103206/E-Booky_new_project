@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-
-
 @RestController
 public class FeedbackController {
     private final FeedbackService service;
@@ -34,7 +32,7 @@ public class FeedbackController {
 
     @GetMapping("/feedback/book/{id}")
     public List<Feedback> getBookFeedback(@PathVariable int id){
-        Book book = new Book();
+        Book book = new Ebook();
         book.setBookId(id);
 
         return service.getAllFeedback(book);
@@ -45,3 +43,5 @@ public class FeedbackController {
         return service.addFeedback(feedback);
     }
 }
+
+

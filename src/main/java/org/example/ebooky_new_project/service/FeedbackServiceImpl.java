@@ -1,6 +1,5 @@
 package org.example.ebooky_new_project.service;
 
-
 import org.example.ebooky_new_project.model.Book;
 import org.example.ebooky_new_project.model.Feedback;
 import org.example.ebooky_new_project.model.User;
@@ -15,12 +14,10 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     private final FeedbackRepository repository;
     private final List<Feedback> feedbackList;
-
-    public FeedbackServiceImpl() {
+    public FeedbackServiceImpl(){
         this.repository = new FeedbackRepositoryImpl();
         this.feedbackList = repository.getAllFeedback();
     }
-
 
     @Override
     public List<Feedback> getAllFeedback() {
@@ -70,7 +67,3 @@ public class FeedbackServiceImpl implements FeedbackService {
         return false;
     }
 }
-
-
-
-

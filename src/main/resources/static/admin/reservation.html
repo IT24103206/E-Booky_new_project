@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ebooky3 - Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/user.css">
+</head>
+<body>
+<!-- Navigation Bar -->
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#"><i class="bi bi-book"></i> <span>E-booky</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link active" href="index.html"><i class="bi bi-house-door"></i> Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="book.html"><i class="bi bi-book"></i> Books</a></li>
+                <li class="nav-item"><a class="nav-link" href="user.html"><i class="bi bi-people"></i> Users</a></li>
+                <li class="nav-item"><a class="nav-link" href="payments.html"><i class="bi bi-people"></i> Payments</a></li>
+                <li class="nav-item"><a class="nav-link" href="reservation.html"><i class="bi bi-people"></i> Reservation</a></li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-bell"></i></a></li>
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear"></i></a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle"></i> Admin
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <header class="my-4 text-center">
+
+
+    </header>
+
+    <div class="row">
+        <div class="container mt-4">
+            <div class="tab-content">
+                <!-- Users Tab -->
+                <div class="tab-pane fade show active" id="usersTab">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h3>Book Reservation</h3>
+                            <input type="search" id="search-input">
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Title</th>
+                                        <th>Reservation Date</th>
+                                        <th>Booked Date</th>
+                                        <th>status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="userTableBody1">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- change stats Book reservation Modal -->
+                <div class="modal fade" id="changeStatus" tabindex="-1" >
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Confirm User Book Pickup</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p id="change-status-message"></p>
+                                <input type="hidden" id="changeStatusID">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-danger" id="conformChangeStatus">Conform Pick up</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delete User Confirmation Modal -->
+                <div class="modal fade" id="deleteUserModal" tabindex="-1" >
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Confirm Cancel Reservation</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p id="delete-message"></p>
+                                <input type="hidden" id="deleteReservation">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-danger" id="confirmDeleteBooking">Conform Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="toastContainer" class="toast-container"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const reservationTable = document.getElementById("userTableBody1");
+    let reservations = [];
+
+    // Sample JavaScript for demonstration
+    document.addEventListener('DOMContentLoaded', async function() {
+
+        async function  loadReservation() {
+            const response = await fetch("/booking");
+            if(!response.ok) throw new Error('Failed to fetch books');
+
+            reservations = await response.json();
+            displayReservation();
+        }
+
+        await loadReservation();
+
+        document.querySelectorAll('.edit-user').forEach(button => {
+            button.addEventListener('click', function() {
+                const resId = this.getAttribute('data-id');
+
+                const reservation = reservations.find(r => r.bookingId == resId);
+                if (!reservation) {
+                    console.error("Reservation not found!");
+                    return;
+                }
+                document.getElementById("changeStatusID").value = resId;
+                document.getElementById("change-status-message").innerHTML = `Are you sure you want to conform this book pickup ${reservation.bookId}? Where <br>
+                               email: ${reservation.user.email}
+                        <br>   book : ${reservation.book.title}<br>
+                        This action cannot be undone.`
+                const modal = new bootstrap.Modal(document.getElementById('changeStatus'));
+                modal.show();
+            });
+        });
+        //
+        // Delete user buttons
+        document.querySelectorAll('.delete-user').forEach(button => {
+            button.addEventListener('click', function() {
+                const resId = this.getAttribute('data-id');
+
+                const reservation = reservations.find(r => r.bookingId == resId);
+                if (!reservation) {
+                    console.error("Reservation not found!");
+                    return;
+                }
+                document.getElementById("deleteReservation").value = resId;
+                document.getElementById("delete-message").innerHTML = `Are you sure you want to delete this Reservation ${reservation.bookId}? Where <br>
+                               email: ${reservation.user.email}
+                        <br>   book : ${reservation.book.title} <br>
+                        This action cannot be undone.`
+                const modal = new bootstrap.Modal(document.getElementById('deleteUserModal'));
+                modal.show();
+            });
+        });
+        //
+        // Confirm update status
+        document.getElementById('conformChangeStatus').addEventListener('click',async function() {
+
+            const reservationID = document.getElementById("changeStatusID").value;
+            try{
+                const response = await fetch(`/booking/change/${reservationID}`,{
+                    method:"PATCH",
+                    credentials:"include"
+                });
+                if (response.ok){
+                    await closeAllModalsAndReload();
+                }
+            }catch (ex){
+                console.error(ex);
+            }
+
+            showToast('Book collect successfully', 'success');
+
+            const modal = bootstrap.Modal.getInstance(document.getElementById('conformChangeStatus'));
+            modal.hide();
+        });
+
+        // Confirm delete user
+        document.getElementById('confirmDeleteBooking').addEventListener('click',async function() {
+
+            const reservationID = document.getElementById("deleteReservation").value;
+            try{
+                const response = await fetch(`/booking/delete/${reservationID}`,{
+                    method:"DELETE",
+                    credentials:"include"
+                });
+                if (response.ok){
+                    await closeAllModalsAndReload();
+                }
+            }catch (ex){
+                console.error(ex);
+            }
+
+            showToast('User deleted successfully', 'success');
+
+            const modal = bootstrap.Modal.getInstance(document.getElementById('deleteUserModal'));
+            modal.hide();
+        });
+
+        function closeAllModalsAndReload() {
+            // Close all visible modals
+            document.querySelectorAll('.modal.show').forEach(modalEl => {
+                const modalInstance = bootstrap.Modal.getInstance(modalEl);
+                if (modalInstance) {
+                    // Move focus away to avoid accessibility warnings
+                    document.activeElement.blur();
+                    modalInstance.hide();
+                }
+            });
+
+            // Reload users
+            loadReservation();
+        }
+        // Helper function to show toast messages
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toastEl = document.createElement('div');
+            toastEl.className = `toast show align-items-center text-white bg-${type} border-0`;
+            toastEl.setAttribute('role', 'alert');
+            toastEl.setAttribute('aria-live', 'assertive');
+            toastEl.setAttribute('aria-atomic', 'true');
+
+            toastEl.innerHTML = `
+    <div class="d-flex">
+        <div class="toast-body">
+            ${message}
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+`;
+
+            toastContainer.appendChild(toastEl);
+
+            setTimeout(() => {
+                toastEl.classList.remove('show');
+                setTimeout(() => toastEl.remove(), 300);
+            }, 3000);
+        }
+    });
+
+    function displayReservation() {
+        reservationTable.innerHTML = "";
+        reservations.forEach(reservation => {
+            const actionButtons = !reservation.picked
+                ? `<td class="action-buttons">
+                    <button class="btn btn-info btn-sm btn-action edit-user" data-id="${reservation.bookingId}">Conform Pickup</button>
+                    <button class="btn btn-danger btn-sm btn-action delete-user" data-id="${reservation.bookingId}">Cancel Pickup</button>
+               </td>`
+                : `<td></td>`;
+
+            const element = `<tr>
+            <td>${reservation.bookingId}</td>
+            <td>${reservation.user.firstName} ${reservation.user.lastName}</td>
+            <td>${reservation.user.email}</td>
+            <td>${reservation.book.title}</td>
+            <td>${formatDate(reservation.reserveDate)}</td>
+            <td>${formatDate(reservation.bookingDate)}</td>
+            ${actionButtons}
+        </tr>`;
+
+            reservationTable.innerHTML += element;
+        });
+    }
+    function formatDate(timestamp) {
+        const date = new Date(timestamp);
+
+        // Format as YYYY-MM-DD HH:mm:ss
+        return date.getFullYear() + "-" +
+            String(date.getMonth() + 1).padStart(2, '0') + "-" +
+            String(date.getDate()).padStart(2, '0') + " " +
+            String(date.getHours()).padStart(2, '0') + ":" +
+            String(date.getMinutes()).padStart(2, '0') + ":" +
+            String(date.getSeconds()).padStart(2, '0');
+
+        console.log("Formatted date:", formattedDate);
+
+    }
+</script>
+</body>
+</html>
