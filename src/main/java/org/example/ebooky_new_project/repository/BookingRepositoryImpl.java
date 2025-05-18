@@ -1,6 +1,5 @@
 package org.example.ebooky_new_project.repository;
 
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.ebooky_new_project.model.Booking;
