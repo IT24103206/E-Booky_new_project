@@ -1,11 +1,10 @@
 package org.example.ebooky_new_project.repository;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.ebooky_new_project.model.User;
 
-import java.io.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +12,6 @@ import java.util.Optional;
 public class UserRepositoryImpl implements UserRepository {
 
     private File file = new File("user.txt");
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public UserRepositoryImpl(){
         try{
@@ -23,23 +21,17 @@ public class UserRepositoryImpl implements UserRepository {
         }catch (Exception ex){
             ex.printStackTrace();
         }
-
-        objectMapper.activateDefaultTyping(
-                objectMapper.getPolymorphicTypeValidator(),
-                ObjectMapper.DefaultTyping.JAVA_LANG_OBJECT,
-                JsonTypeInfo.As.PROPERTY
-        );
     }
 
     @Override
     public List<User> getAllUsers() {
         List<User> userList= new ArrayList<>();
 
-        try(BufferedReader br = new BufferedReader(new FileReader(file))){
-            String line;
-            while ((line = br.readLine()) != null) {
-                User user = objectMapper.readValue(line, User.class);
-                userList.add(user);
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try{
+            if(file.exists() && file.length()>0){
+                userList = objectMapper.readValue(file, new TypeReference<List<User>>() {});
             }
         }catch (Exception ex){
             ex.printStackTrace();
@@ -58,12 +50,10 @@ public class UserRepositoryImpl implements UserRepository {
         }
         user.setUserId(userId);
         users.add(user);
-
-        try(FileWriter fw = new FileWriter(file,true);
-            PrintWriter pw = new PrintWriter(fw)){
-
-            String json = objectMapper.writeValueAsString(user);
-            pw.println(json);
+        ObjectMapper objectMapper = new ObjectMapper();
+        try{
+            objectMapper.writeValue(file,users);
+            System.out.println(user.toString());
             return user;
         }catch (Exception ex){
             ex.printStackTrace();
@@ -74,6 +64,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Optional<User> updateUser(User user) {
         List<User> users = getAllUsers();
+        ObjectMapper objectMapper = new ObjectMapper();
         for (User u:users){
             if(u.getUserId() == user.getUserId()){
                 u.setEmail(user.getEmail());
@@ -81,7 +72,7 @@ public class UserRepositoryImpl implements UserRepository {
                 u.setLastName(user.getLastName());
                 u.setPassword(user.getPassword());
                 try {
-                    saveAllUsers(users);
+                    objectMapper.writeValue(file,users);
                     return Optional.of(user);
                 }catch (Exception ex){
                     ex.printStackTrace();
@@ -99,7 +90,8 @@ public class UserRepositoryImpl implements UserRepository {
             if(u.getUserId()==Id){
                 users.remove(u);
                 try{
-                    saveAllUsers(users);
+                    ObjectMapper mapper = new ObjectMapper();
+                    mapper.writeValue(file,users);
                     return true;
                 }catch (Exception ex){
                     ex.printStackTrace();
@@ -107,21 +99,5 @@ public class UserRepositoryImpl implements UserRepository {
             }
         }
         return false;
-    }
-
-    public void saveAllUsers(List<User> users) {
-        try (FileWriter fw = new FileWriter(file, false);
-             PrintWriter pw = new PrintWriter(fw)) {
-
-            for (User user : users) {
-                String json = objectMapper.writeValueAsString(user);
-                pw.println(json);  // Write each user on a new line
-            }
-
-            System.out.println("All users saved successfully!");
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 }
