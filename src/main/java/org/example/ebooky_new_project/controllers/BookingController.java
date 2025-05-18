@@ -14,7 +14,6 @@ public class BookingController {
     public BookingController(){
         service = new BookingServiceImpl();
     }
-
     @GetMapping("/booking")
     public List<Booking> getBooking(
             @RequestParam(required = false) Integer userId,
