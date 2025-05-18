@@ -11,7 +11,6 @@ public class Booking {
 
     public Booking(){}
 
-
     public Booking(PrintedBook book,RegularUser user,Date bookingDate,Date reserveDate,boolean isPicked){
         this.book = book;
         this.user = user;
