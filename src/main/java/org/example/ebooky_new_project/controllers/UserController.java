@@ -1,27 +1,23 @@
 package org.example.ebooky_new_project.controllers;
 
-import jakarta.servlet.http.HttpSession;
 import org.example.ebooky_new_project.dto.LoginRequest;
 import org.example.ebooky_new_project.model.User;
 import org.example.ebooky_new_project.service.UserService;
 import org.example.ebooky_new_project.service.UserServiceImpl;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-@RestController
 public class UserController {
     private UserService userService;
 
-    public UserController() {
+    public UserController(){
         this.userService = new UserServiceImpl();
     }
 
     @GetMapping("/users")
-    public List<User> getAllUser() {
+    public List<User> getUsers() {
         return userService.getAllUsers();
     }
 
@@ -30,22 +26,14 @@ public class UserController {
         return userService.saveUser(user);
     }
 
-    @PostMapping("/user/login")
-    public ResponseEntity<Optional<User>> loginUser(@RequestBody LoginRequest loginRequest, HttpSession session) {
+    @PostMapping("user/login")
+    public Optional<User> loginUser(@RequestBody LoginRequest loginRequest) {
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
-
-        Optional<User> user = userService.loginUser(email, password);
-
-        if (user.isPresent()) {
-            session.setAttribute("logUser", user.get());
-            return ResponseEntity.ok(user); // 200 OK with user data
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Optional.empty()); // 401 Unauthorized
-        }
+        return userService.loginUser(email, password);
     }
 
-    @PutMapping("/user/{id}")
+    @PostMapping("/user/{id}")
     public Optional<User> updateUser(@RequestBody User user, @PathVariable int id) {
         user.setUserId(id);
         return userService.updateUser(user);
@@ -54,15 +42,5 @@ public class UserController {
     @DeleteMapping("/user/{id}")
     public boolean deleteUser(@PathVariable int id) {
         return userService.deleteUser(id);
-    }
-
-    @GetMapping("/check-login")
-    public ResponseEntity<?> checkLoginStatus(HttpSession session) {
-        Object user = session.getAttribute("logUser");
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not logged in");
-        }
-        return ResponseEntity.ok("Logged in");
-
     }
 }

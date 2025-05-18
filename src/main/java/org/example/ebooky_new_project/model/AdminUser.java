@@ -1,8 +1,5 @@
 package org.example.ebooky_new_project.model;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-
-@JsonSubTypes({})
 public class AdminUser extends User{
     private String adminRole;
 

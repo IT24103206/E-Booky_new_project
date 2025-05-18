@@ -1,22 +1,30 @@
 package org.example.ebooky_new_project.repository;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.ebooky_new_project.model.Book;
 
-import java.io.File;
+import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 
-public class BookRepositoryImpl implements BookRepository {
+public class BookRepositoryImpl implements BookRepository{
 
     private File file = new File("book.txt");
+    private final ObjectMapper objectMapper;
 
-    public BookRepositoryImpl() {
-        if (!file.exists()) {
+    public BookRepositoryImpl(){
+        this.objectMapper = new ObjectMapper();
+        objectMapper.activateDefaultTyping(
+                objectMapper.getPolymorphicTypeValidator(),
+                ObjectMapper.DefaultTyping.JAVA_LANG_OBJECT,
+                JsonTypeInfo.As.PROPERTY
+        );
+        if(!file.exists()){
             try {
                 file.createNewFile();
-            } catch (Exception ex) {
+            }catch (Exception ex){
                 ex.printStackTrace();
             }
         }
@@ -25,11 +33,11 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public List<Book> getAllBook() {
         List<Book> books = new LinkedList<>();
-        try{
-            ObjectMapper mapper = new ObjectMapper();
-
-            if(file.exists() && file.length()>0){
-                books = mapper.readValue(file, new TypeReference<List<Book>>() {});
+        try(BufferedReader br = new BufferedReader(new FileReader(file))){
+            String line;
+            while ((line = br.readLine()) != null) {
+                Book book = objectMapper.readValue(line, Book.class);
+                books.add(book);
             }
         }catch (Exception ex){
             ex.printStackTrace();
@@ -47,9 +55,11 @@ public class BookRepositoryImpl implements BookRepository {
         book.setBookId(id);
         books.add(book);
 
-        try{
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.writeValue(file,books);
+        try(FileWriter fw = new FileWriter(file,true);
+            PrintWriter pw = new PrintWriter(fw)){
+
+            String json = objectMapper.writeValueAsString(book);
+            pw.println(json);
             return book;
         }catch (Exception ex){
             ex.printStackTrace();
@@ -80,7 +90,7 @@ public class BookRepositoryImpl implements BookRepository {
                 }
             }
             if(isFind){
-                objectMapper.writeValue(file,bookList);
+                saveAllBooks(bookList);
                 return book;
             }
         }catch (Exception ex){
@@ -104,13 +114,28 @@ public class BookRepositoryImpl implements BookRepository {
             }
 
             if (isRemoved) {
-                ObjectMapper objectMapper = new ObjectMapper();
-                objectMapper.writeValue(file, books);
+                saveAllBooks(books);
                 return true;
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         return false;
+    }
+
+    public void saveAllBooks(List<Book> books) {
+        try (FileWriter fw = new FileWriter(file, false);
+             PrintWriter pw = new PrintWriter(fw)) {
+
+            for (Book book :books) {
+                String json = objectMapper.writeValueAsString(book);
+                pw.println(json);  // Write each user on a new line
+            }
+
+            System.out.println("All users saved successfully!");
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }
