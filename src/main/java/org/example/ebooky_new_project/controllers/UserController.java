@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@RestController
 public class UserController {
     private UserService userService;
 
@@ -26,7 +27,7 @@ public class UserController {
         return userService.saveUser(user);
     }
 
-    @PostMapping("user/login")
+    @PostMapping("/user/login")
     public Optional<User> loginUser(@RequestBody LoginRequest loginRequest) {
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();

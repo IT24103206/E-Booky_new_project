@@ -1,3 +1,4 @@
+<script src="adminCheck.js"></script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -80,8 +81,20 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="description">Description:</label>
+                    <input type="text" id="description" required>
+                </div>
+
+                <div class="form-group">
                     <label for="genre">Genre:</label>
-                    <input type="text" id="genre" required>
+                    <select id="genre" required>
+                        <option value="">Select Genre</option>
+                        <option value="Fiction Books">Fiction Books</option>
+                        <option value="Science Fiction & Fantasy">Science Fiction & Fantasy</option>
+                        <option value="Mystery & Thriller">Mystery & Thriller</option>
+                        <option value="Non-Fiction & Self-Help">Non-Fiction & Self-Help</option>
+                        <option value="Classic Literature">Classic Literature</option>
+                    </select>
                 </div>
 
                 <div class="form-group">
@@ -99,6 +112,11 @@
                     <input type="text" id="coverPage">
                 </div>
 
+                <div class="form-group" class="hidden">
+                    <label for="fileLocation">Available Stock:</label>
+                    <input type="number" id="available-stock">
+                </div>
+
                 <div id="ebookFields" class="hidden">
                     <div class="form-group">
                         <label for="fileSize">File Size (MB):</label>
@@ -110,6 +128,7 @@
                         <input type="text" id="fileLocation">
                     </div>
                 </div>
+
 
                 <div class="form-actions">
                     <button type="button" id="cancelBtn" class="btn secondary">Cancel</button>
@@ -244,7 +263,8 @@
     // Functions
     function toggleEbookFields() {
         const selectedType = bookTypeSelect.value;
-        ebookFields.classList.toggle('hidden', selectedType !== 'ebook');
+        ebookFields.classList.toggle('hidden', selectedType !== 'Ebook');
+        document.getElementById("available-stock").classList.toggle('hidden',selectedType !== 'PrintedBook')
     }
 
     async function loadBooks() {
@@ -345,6 +365,7 @@
             document.getElementById('noPages').value = book.noPages;
             document.getElementById('price').value = book.price;
             document.getElementById('coverPage').value = book.coverPage || '';
+            document.getElementById('description').value = book.description;
 
             // Set book type
             const bookType = book['@type'] || 'book';
@@ -377,6 +398,8 @@
 
 
         const bookType = document.getElementById('bookType').value;
+        const type = bookType === 'Ebook' ? 'Ebook' : 'PrintedBook';
+        console.log(type);
         const bookData = {
             bookId: editingBookId ? parseInt(editingBookId) : undefined,
             title: document.getElementById('title').value,
@@ -387,7 +410,8 @@
             noPages: parseInt(document.getElementById('noPages').value),
             price: parseFloat(document.getElementById('price').value),
             coverPage: document.getElementById('coverPage').value,
-            "@type": bookType === 'Ebook' ? 'Ebook' : (bookType === 'PrintedBook' ? 'PrintedBook' : 'Ebook')
+            description:document.getElementById('description').value,
+            "@type": type,
         };
 
         // Add ebook specific fields if needed
@@ -396,7 +420,7 @@
             bookData.fileLocation = document.getElementById('fileLocation').value;
         }
         if(bookType==='PrintedBook'){
-            bookData.availableStock = parseInt(document.getElementById("").value);
+            bookData.availableStock = parseInt(document.getElementById("available-stock").value);
         }
 
         try {

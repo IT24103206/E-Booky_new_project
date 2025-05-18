@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Book Reservation Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Georgia', serif;
+        }
+
+        body {
+            background: url('https://i.pinimg.com/736x/ef/1b/2e/ef1b2e7012b0bd1259c7af187bfdf0b6.jpg') no-repeat center center fixed;
+            background-size: cover;
+            background-blend-mode: overlay;
+            background-color: rgba(13, 16, 13, 0.75);
+            color: #ffffff;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: #ffffff;
+            text-shadow: 2px 2px 6px #000;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+        }
+
+        .search-container {
+            margin: 20px auto;
+            max-width: 500px;
+        }
+
+        #search-input {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        #search-input:focus {
+            box-shadow: 0 0 0 2px #28a745;
+        }
+
+        .book-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .book {
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            transition: 0.3s ease;
+            backdrop-filter: blur(4px);
+            position: relative;
+        }
+
+        .book:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 255, 0, 0.2);
+        }
+
+        .book img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .book h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        .book p {
+            font-size: 0.95rem;
+            color: #cfcfcf;
+            margin-bottom: 8px;
+        }
+
+        .stars {
+            color: gold;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .price {
+            color: #76ff03;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .book button {
+            background-color: #145c2c;
+            color: white;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+        }
+
+        .book button:hover {
+            background-color: #28a745;
+            transform: scale(1.05);
+        }
+
+        .book button:disabled {
+            background-color: #333;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .cart-container {
+            margin-top: 50px;
+            padding: 25px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .cart-container h2 {
+            font-size: 2rem;
+        }
+
+        .cart-summary {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #444;
+            gap: 15px;
+        }
+
+        .cart-item img {
+            width: 60px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .cart-info {
+            flex: 1;
+        }
+
+        .cart-info small {
+            display: block;
+            font-size: 0.85rem;
+            color: #ccc;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-item button {
+            background-color: #333;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .cart-item button:hover {
+            background-color: #555;
+        }
+
+        .status-PENDING { color: #00ff91; font-weight: bold; }
+        .status-CONFIRMED { color: #00c853; font-weight: bold; }
+        .status-CANCELLED { color: #ffc107; font-weight: bold; }
+        .status-PURCHASED { color: #28a745; font-weight: bold; }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        .actions button {
+            padding: 12px 20px;
+            font-weight: bold;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .actions button:disabled {
+            background-color: #333;
+            color: #777;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .confirm { background-color: #28a745; color: white; }
+        .confirm:hover:not(:disabled) { background-color: #1d7736; transform: scale(1.05); }
+
+        .cancel { background-color: #ffc107; color: black; }
+        .cancel:hover:not(:disabled) { background-color: #aa8d00; transform: scale(1.05); }
+
+        .purchase { background-color: #0a4920; color: white; }
+        .purchase:hover:not(:disabled) { background-color: #137a34; transform: scale(1.05); }
+
+        .total-price {
+            text-align: right;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            color: #a1ffb8;
+            font-weight: bold;
+        }
+
+        .select-all {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #222;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .close-modal:hover {
+            color: white;
+        }
+
+        .book-details {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .book-details img {
+            width: 150px;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .book-info {
+            flex: 1;
+        }
+
+        .book-info h3 {
+            margin-bottom: 10px;
+            color: #76ff03;
+        }
+
+        .book-info p {
+            margin-bottom: 8px;
+            color: #ccc;
+        }
+
+        .book-description {
+            margin-top: 20px;
+            color: #aaa;
+            line-height: 1.5;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #28a745;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .book-details {
+                flex-direction: column;
+            }
+
+            .book-details img {
+                width: 100%;
+                height: auto;
+                max-height: 300px;
+            }
+
+            .cart-item {
+                flex-wrap: wrap;
+            }
+
+            .cart-item img {
+                width: 50px;
+                height: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Book Reservation Portal</h1>
+</header>
+
+<div class="search-container">
+    <input type="text" id="search-input" placeholder="Search books..." aria-label="Search books">
+</div>
+
+<section class="book-container" id="book-list">
+    <!-- Books will be loaded dynamically -->
+</section>
+
+<section class="cart-container">
+    <div class="cart-header">
+        <h2>Your Reservations</h2>
+        <div class="cart-summary" id="cart-summary">No items</div>
+    </div>
+    <div class="select-all">
+        <input type="checkbox" id="select-all" onchange="toggleSelectAll(this)">
+        <label for="select-all">Select All</label>
+    </div>
+    <div id="cart"></div>
+    <div class="actions">
+        <button class="confirm" onclick="updateStatus('CONFIRMED')" disabled>CONFIRM</button>
+        <button class="cancel" onclick="updateStatus('CANCELLED')" disabled>CANCEL</button>
+        <button class="purchase" onclick="updateStatus('PURCHASED')" disabled>PURCHASE</button>
+    </div>
+    <div class="total-price" id="total-price">Total Price: Rs. 0</div>
+</section>
+
+<div class="modal" id="book-modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <div class="book-details">
+            <img id="modal-book-image" src="" alt="">
+            <div class="book-info">
+                <h3 id="modal-book-title"></h3>
+                <p id="modal-book-author"></p>
+                <p id="modal-book-rating"></p>
+                <p id="modal-book-price"></p>
+                <button id="modal-reserve-btn" onclick="reserveFromModal()">RESERVE NOW</button>
+            </div>
+        </div>
+        <div class="book-description" id="modal-book-description"></div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+    // Book data
+    const books = [
+        {
+            id: 1,
+            title: "The Power of Now",
+            author: "Eckhart Tolle",
+            price: 2500,
+            rating: "★★★★☆",
+            image: "https://projectlifemastery.com/wp-content/uploads/2012/06/Eckhart-Tolle-The-Power-Of-Now-Review.jpg",
+            description: "The Power of Now is a guide to spiritual enlightenment that shows readers how to free themselves from enslavement to the mind and live in the present moment. Eckhart Tolle uses simple language and an easy question-and-answer format to help readers understand the importance of living in the now."
+        },
+        {
+            id: 2,
+            title: "To Kill a Mockingbird",
+            author: "Harper Lee",
+            price: 1800,
+            rating: "★★★☆☆",
+            image: "https://www.harryhartog.com.au/cdn/shop/files/9780099466734.jpg?v=1725013209&width=480",
+            description: "To Kill a Mockingbird is a novel by Harper Lee published in 1960. It was immediately successful, winning the Pulitzer Prize, and has become a classic of modern American literature. The plot and characters are loosely based on Lee's observations of her family, her neighbors and an event that occurred near her hometown in 1936, when she was 10 years old."
+        },
+        {
+            id: 3,
+            title: "Harry Potter and the Half-Blood Prince",
+            author: "J.K. Rowling",
+            price: 3200,
+            rating: "★★★★★",
+            image: "https://media.harrypotterfanzone.com/half-blood-prince-us-childrens-edition-2013-600x0-c-default.jpg",
+            description: "Harry Potter and the Half-Blood Prince is the sixth novel in the Harry Potter series. In this book, Harry Potter learns a great deal about Lord Voldemort's past, and Harry prepares for the final battle against Voldemort alongside his headmaster and mentor Albus Dumbledore."
+        },
+        {
+            id: 4,
+            title: "The Alchemist",
+            author: "Paulo Coelho",
+            price: 2100,
+            rating: "★★★★☆",
+            image: "https://images-na.ssl-images-amazon.com/images/I/71aFt4+OTOL.jpg",
+            description: "The Alchemist follows a young Andalusian shepherd in his journey to the pyramids of Egypt, after having a recurring dream of finding a treasure there. The story explores the theme of destiny and the idea that when you really want something to happen, the whole universe will conspire so that your wish comes true."
+        },
+        {
+            id: 5,
+            title: "Atomic Habits",
+            author: "James Clear",
+            price: 2800,
+            rating: "★★★★★",
+            image: "https://images-na.ssl-images-amazon.com/images/I/91bYsX41DVL.jpg",
+            description: "No matter your goals, Atomic Habits offers a proven framework for improving - every day. James Clear, one of the world's leading experts on habit formation, reveals practical strategies that will teach you exactly how to form good habits, break bad ones, and master the tiny behaviors that lead to remarkable results."
+        },
+        {
+            id: 6,
+            title: "Ikigai",
+            author: "Héctor García and Francesc Miralles",
+            price: 2300,
+            rating: "★★★★☆",
+            image: "https://images-na.ssl-images-amazon.com/images/I/71tbalAHYCL.jpg",
+            description: "The people of Japan believe that everyone has an ikigai - a reason to jump out of bed each morning. And according to the residents of the Japanese island of Okinawa - the world's longest-living people - finding it is the key to a longer and more fulfilled life."
+        }
+    ];
+
+    let cart = JSON.parse(localStorage.getItem('bookCart')) || [];
+    let currentModalBook = null;
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+        renderBooks();
+        renderCart();
+
+        // Search functionality
+        document.getElementById('search-input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            renderBooks(searchTerm);
+        });
+    });
+
+    function renderBooks(searchTerm = '') {
+        const bookList = document.getElementById('book-list');
+        bookList.innerHTML = '';
+
+        const filteredBooks = books.filter(book =>
+            reservation.title.toLowerCase().includes(searchTerm) ||
+            reservation.author.toLowerCase().includes(searchTerm)
+        );
+
+        if (filteredBooks.length === 0) {
+            bookList.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:#aaa;">No books found matching your search</p>';
+            return;
+        }
+
+        filteredBooks.forEach(book => {
+            const isInCart = cart.some(item => item.id === reservation.id && item.status !== 'CANCELLED');
+
+            const div = document.createElement('div');
+            div.className = 'book';
+            div.innerHTML = `
+          <img src="${reservation.image}" alt="${reservation.title}" onclick="showBookDetails(${reservation.id})">
+          <h3>${reservation.title}</h3>
+          <p>Author: ${reservation.author}</p>
+          <div class="stars">${reservation.rating}</div>
+          <div class="price">Rs. ${reservation.price}</div>
+          <button onclick="addToCart(${reservation.id})" ${isInCart ? 'disabled' : ''}>
+            ${isInCart ? 'RESERVED' : 'RESERVE NOW'}
+          </button>
+        `;
+            bookList.appendChild(div);
+        });
+    }
+
+    function showBookDetails(bookId) {
+        const book = books.find(b => b.id === bookId);
+        if (!reservation) return;
+
+        currentModalBook = reservation;
+
+        document.getElementById('modal-book-image').src = reservation.image;
+        document.getElementById('modal-book-image').alt = reservation.title;
+        document.getElementById('modal-book-title').textContent = reservation.title;
+        document.getElementById('modal-book-author').textContent = Author: ${book.author};
+        document.getElementById('modal-book-rating').textContent = Rating: ${book.rating};
+        document.getElementById('modal-book-price').textContent = Price: Rs. ${reservation.price};
+        document.getElementById('modal-book-description').textContent = reservation.description;
+
+        const isInCart = cart.some(item => item.id === reservation.id && item.status !== 'CANCELLED');
+        const reserveBtn = document.getElementById('modal-reserve-btn');
+        reserveBtn.textContent = isInCart ? 'ALREADY RESERVED' : 'RESERVE NOW';
+        reserveBtn.disabled = isInCart;
+
+        document.getElementById('book-modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('book-modal').style.display = 'none';
+    }
+
+    function reserveFromModal() {
+        if (currentModalBook) {
+            addToCart(currentModalBook.id);
+            closeModal();
+        }
+    }
+
+    function addToCart(bookId) {
+        const book = books.find(b => b.id === bookId);
+        if (!reservation) return;
+
+        // Check if book already exists in cart with PENDING or CONFIRMED status
+        const exists = cart.some(item =>
+            item.id === bookId &&
+            (item.status === 'PENDING' || item.status === 'CONFIRMED')
+        );
+
+        if (exists) {
+            showToast('This book is already in your reservations!');
+            return;
+        }
+
+        const now = new Date();
+        const formattedDate = now.toLocaleString([], {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        cart.push({
+            id: reservation.id,
+            title: reservation.title,
+            price: reservation.price,
+            image: reservation.image,
+            status: 'PENDING',
+            selected: false,
+            date: formattedDate
+        });
+
+        saveCart();
+        renderCart();
+        renderBooks();
+        showToast(${book.title} added to reservations!);
+    }
+
+    function removeFromCart(index) {
+        if (confirm('Are you sure you want to remove this reservation?')) {
+            cart.splice(index, 1);
+            saveCart();
+            renderCart();
+            renderBooks();
+            showToast('Reservation removed');
+        }
+    }
+
+    function updateStatus(newStatus) {
+        const selectedItems = cart.filter(item => item.selected);
+
+        if (selectedItems.length === 0) {
+            showToast('No items selected!');
+            return;
+        }
+
+        selectedItems.forEach(item => {
+            if (newStatus === 'CONFIRMED' || item.status === 'PENDING') {
+                item.status = newStatus;
+            }
+        });
+
+        saveCart();
+        renderCart();
+        renderBooks();
+
+        const messages = {
+            'CONFIRMED': 'Selected reservations confirmed!',
+            'CANCELLED': 'Selected reservations cancelled.',
+            'PURCHASED': 'Selected books marked as purchased!'
+        };
+        showToast(messages[newStatus]);
+    }
+
+    function toggleSelectAll(source) {
+        cart.forEach(item => item.selected = source.checked);
+        renderCart();
+    }
+
+    function toggleItemSelect(index) {
+        cart[index].selected = !cart[index].selected;
+
+        // Update "Select All" checkbox
+        const selectAll = document.getElementById('select-all');
+        selectAll.checked = cart.every(item => item.selected);
+        selectAll.indeterminate = !selectAll.checked && cart.some(item => item.selected);
+
+        renderCart();
+    }
+
+    function renderCart() {
+        const cartDiv = document.getElementById('cart');
+        const cartSummary = document.getElementById('cart-summary');
+        const actionButtons = document.querySelectorAll('.actions button');
+        const totalPriceElement = document.getElementById('total-price');
+
+        cartDiv.innerHTML = '';
+
+        if (cart.length === 0) {
+            cartDiv.innerHTML = '<p style="text-align:center; color:#aaa;">No reservations yet.</p>';
+            cartSummary.textContent = 'No items';
+            totalPriceElement.textContent = 'Total Price: Rs. 0';
+            actionButtons.forEach(btn => btn.disabled = true);
+            document.getElementById('select-all').checked = false;
+            document.getElementById('select-all').indeterminate = false;
+            return;
+        }
+
+        const pendingCount = cart.filter(item => item.status === 'PENDING').length;
+        const confirmedCount = cart.filter(item => item.status === 'CONFIRMED').length;
+        const cancelledCount = cart.filter(item => item.status === 'CANCELLED').length;
+        cartSummary.textContent = ${cart.length} items (${pendingCount} pending, ${confirmedCount} confirmed, ${cancelledCount} cancelled);
+
+        // Calculate total price of selected items
+        let total = 0;
+        const selectedItems = cart.filter(item => item.selected);
+        selectedItems.forEach(item => total += item.price);
+
+        totalPriceElement.textContent = Total Price: Rs. ${total};
+
+        // Enable/disable action buttons based on selected items
+        const hasSelectedPending = selectedItems.some(item => item.status === 'PENDING');
+        actionButtons.forEach(btn => {
+            if (btn.classList.contains('confirm') || btn.classList.contains('cancel')) {
+                btn.disabled = !hasSelectedPending;
+            } else {
+                btn.disabled = selectedItems.length === 0;
+            }
+        });
+
+        // Render cart items
+        cart.forEach((item, index) => {
+            const book = books.find(b => b.id === item.id);
+            const div = document.createElement('div');
+            div.className = 'cart-item';
+            div.innerHTML = `
+          <input type="checkbox" ${item.selected ? 'checked' : ''} onchange="toggleItemSelect(${index})">
+          <img src="${reservation ? reservation.image : ''}" alt="${item.title}">
+          <div class="cart-info">
+            <strong>${item.title}</strong>
+            <small>${item.date} | Rs. ${item.price}</small>
+          </div>
+          <div class="cart-item-actions">
+            <span class="status-${item.status}">${item.status}</span>
+            <button onclick="removeFromCart(${index})">Remove</button>
+          </div>
+        `;
+            cartDiv.appendChild(div);
+        });
+    }
+
+    function saveCart() {
+        localStorage.setItem('bookCart', JSON.stringify(cart));
+    }
+
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.classList.add('show');
+
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+
+    // Close modal when clicking outside
+    window.addEventListener('click', function(event) {
+        const modal = document.getElementById('book-modal');
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+</script>
+</body>
+</html>
