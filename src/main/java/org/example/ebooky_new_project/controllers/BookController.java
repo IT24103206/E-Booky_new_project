@@ -14,14 +14,19 @@ import java.util.Optional;
 public class BookController {
     private final BookService bookService;
 
-    public BookController() {this.bookService = new BookServiceImpl();}
+    public BookController() {this.bookService = new BookServiceImpl() {
+        @Override
+        public List<Book> sortBook(List<Book> books, String sort, boolean ascending) {
+            return List.of();
+        }
+    };}
 
     @GetMapping("/book/{id}")
     public Book getBook(@PathVariable int id) { return bookService.getBook(id);}
 
     @GetMapping("/book")
     public Book getBook(@RequestParam String title){
-        return bookService.getBook(title);
+        return bookService.getBook(Integer.parseInt(title));
     }
 
     @GetMapping("/books")

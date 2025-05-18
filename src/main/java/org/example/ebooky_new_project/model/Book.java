@@ -1,31 +1,27 @@
 package org.example.ebooky_new_project.model;
 
 import java.util.Date;
-import java.util.List;
 
-public abstract class Book {
+public class Book {
     private int bookId;
     private String title;
     private String author;
     private String isbn;
     private Date publishedDate;
     private String genre;
-    private String description;
     private int noPages;
     private double price;
     private String coverPage;
-    private List<Feedback> feedbacks;
 
     public Book(){}
 
-    public Book(int bookId,String title,String author,String isbn,Date publishedDate,String genre,String description,int noPages,double price,String coverPage){
+    public Book(int bookId,String title,String author,String isbn,Date publishedDate,String genre,int noPages,double price,String coverPage){
         this.bookId = bookId;
         this.title = title;
         this.author = author;
         this.isbn = isbn;
         this.publishedDate = publishedDate;
         this.genre = genre;
-        this.description = description;
         this.noPages = noPages;
         this.price = price;
         this.coverPage = coverPage;
@@ -58,19 +54,5 @@ public abstract class Book {
     public String getCoverPage() { return coverPage; }
     public void setCoverPage(String coverPage) { this.coverPage = coverPage; }
 
-    public List<Feedback> getFeedbacks() {
-        return feedbacks;
-    }
 
-    public void setFeedbacks(List<Feedback> feedbacks) {
-        this.feedbacks = feedbacks;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

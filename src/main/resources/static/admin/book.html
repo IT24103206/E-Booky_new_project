@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-booky Book Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"/>
+    <link rel="stylesheet" href="css/book.css">
+    <link rel="stylesheet" href="css/navbar.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#"><i class="bi bi-book"></i> <span>E-booky</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link active" href="index.html"><i class="bi bi-house-door"></i> Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="book.html"><i class="bi bi-book"></i> Books</a></li>
+                <li class="nav-item"><a class="nav-link" href="user.html"><i class="bi bi-people"></i> Users</a></li>
+                <li class="nav-item"><a class="nav-link" href="payments.html"><i class="bi bi-people"></i> Payments</a></li>
+                <li class="nav-item"><a class="nav-link" href="reservation.html"><i class="bi bi-people"></i> Reservation</a></li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-bell"></i></a></li>
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear"></i></a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle"></i> Admin
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <header>
+        <h1>E-booky Book Management</h1>
+    </header>
+
+    <div class="main-content">
+        <section class="book-form">
+            <h2>Add/Edit Book</h2>
+            <form id="bookForm">
+                <input type="hidden" id="bookId">
+
+                <div class="form-group">
+                    <label for="bookType">Book Type:</label>
+                    <select id="bookType" onchange="toggleEbookFields()">
+                        <option value="Ebook">Ebook</option>
+                        <option value="PrintedBook">Printed Book</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="author">Author:</label>
+                    <input type="text" id="author" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="isbn">ISBN:</label>
+                    <input type="text" id="isbn" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="publishedDate">Published Date:</label>
+                    <input type="date" id="publishedDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="genre">Genre:</label>
+                    <input type="text" id="genre" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="noPages">Number of Pages:</label>
+                    <input type="number" id="noPages" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Price:</label>
+                    <input type="number" step="0.01" id="price" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="coverPage">Cover Page URL:</label>
+                    <input type="text" id="coverPage">
+                </div>
+
+                <div id="ebookFields" class="hidden">
+                    <div class="form-group">
+                        <label for="fileSize">File Size (MB):</label>
+                        <input type="number" step="0.01" id="fileSize">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fileLocation">File Location:</label>
+                        <input type="text" id="fileLocation">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" id="cancelBtn" class="btn secondary">Cancel</button>
+                    <button type="submit" id="saveBtn" class="btn primary">Save Book</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="book-list">
+            <h2>Book Catalog</h2>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search books...">
+                <button id="refreshBtn" class="btn primary">Refresh</button>
+            </div>
+
+            <div id="bookList" class="book-items">
+                <!-- Books will be loaded here -->
+                <div class="book-card">
+                    <div class="book-header">
+                        <div class="book-title">Sample Book 1</div>
+                        <div class="book-type">Book</div>
+                    </div>
+                    <div class="book-details">
+                        <p><strong>Author:</strong> John Doe</p>
+                        <p><strong>ISBN:</strong> 123-4567890123</p>
+                        <p><strong>Genre:</strong> Fiction</p>
+                        <p><strong>Pages:</strong> 320</p>
+                        <p><strong>Price:</strong> $19.99</p>
+                    </div>
+                    <div class="book-actions">
+                        <button class="btn primary edit-btn">Edit</button>
+                        <button class="btn secondary delete-btn">Delete</button>
+                    </div>
+                </div>
+
+                <div class="book-card">
+                    <div class="book-header">
+                        <div class="book-title">Sample Ebook</div>
+                        <div class="book-type">Ebook</div>
+                    </div>
+                    <div class="book-details">
+                        <p><strong>Author:</strong> Jane Smith</p>
+                        <p><strong>ISBN:</strong> 987-6543210987</p>
+                        <p><strong>Genre:</strong> Technology</p>
+                        <p><strong>Pages:</strong> 450</p>
+                        <p><strong>Price:</strong> $14.99</p>
+                        <p><strong>File Size:</strong> 5.2MB</p>
+                        <p><strong>Location:</strong> /ebooks/tech</p>
+                    </div>
+                    <div class="book-actions">
+                        <button class="btn primary edit-btn">Edit</button>
+                        <button class="btn secondary delete-btn">Delete</button>
+                    </div>
+                </div>
+
+                <div class="book-card">
+                    <div class="book-header">
+                        <div class="book-title">Printed Book Example</div>
+                        <div class="book-type">Printed Book</div>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Book Cover" class="book-cover">
+                    <div class="book-details">
+                        <p><strong>Author:</strong> Robert Johnson</p>
+                        <p><strong>ISBN:</strong> 456-7890123456</p>
+                        <p><strong>Genre:</strong> Science</p>
+                        <p><strong>Pages:</strong> 280</p>
+                        <p><strong>Price:</strong> $24.99</p>
+                    </div>
+                    <div class="book-actions">
+                        <button class="btn primary edit-btn">Edit</button>
+                        <button class="btn secondary delete-btn">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <aside class="sidebar">
+        <h2>Example Books</h2>
+
+        <div class="example-book">
+            <h3>The Great Novel</h3>
+            <p><strong>Type:</strong> Printed Book</p>
+            <p><strong>Author:</strong> Emily Brontë</p>
+            <p><strong>Pages:</strong> 384</p>
+            <p><strong>Price:</strong> $22.50</p>
+        </div>
+
+        <div class="example-book">
+            <h3>JavaScript Essentials</h3>
+            <p><strong>Type:</strong> Ebook</p>
+            <p><strong>Author:</strong> David Flanagan</p>
+            <p><strong>Size:</strong> 3.8MB</p>
+            <p><strong>Price:</strong> $12.99</p>
+        </div>
+
+        <div class="example-book">
+            <h3>Science Today</h3>
+            <p><strong>Type:</strong> Book</p>
+            <p><strong>Author:</strong> Carl Sagan</p>
+            <p><strong>Pages:</strong> 420</p>
+            <p><strong>Price:</strong> $18.75</p>
+        </div>
+    </aside>
+</div>
+
+<script>
+    // DOM Elements
+    const bookForm = document.getElementById('bookForm');
+    const bookList = document.getElementById('bookList');
+    const searchInput = document.getElementById('searchInput');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const bookTypeSelect = document.getElementById('bookType');
+    const ebookFields = document.getElementById('ebookFields');
+
+    // State
+    let books = [];
+    let editingBookId = null;
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+        loadBooks();
+
+        // Event listeners
+        bookForm.addEventListener('submit', handleFormSubmit);
+        searchInput.addEventListener('input', filterBooks);
+        refreshBtn.addEventListener('click', loadBooks);
+        cancelBtn.addEventListener('click', resetForm);
+    });
+
+    // Functions
+    function toggleEbookFields() {
+        const selectedType = bookTypeSelect.value;
+        ebookFields.classList.toggle('hidden', selectedType !== 'ebook');
+    }
+
+    async function loadBooks() {
+        try {
+            const response = await fetch('http://localhost:8080/books');
+            if (!response.ok) throw new Error('Failed to fetch books');
+
+            books = await response.json();
+            displayBooks(books);
+        } catch (error) {
+            console.error('Error loading books:', error);
+            alert('Error loading books. Please check console for details.');
+        }
+    }
+
+    function displayBooks(booksToDisplay) {
+        bookList.innerHTML = '';
+
+        if (booksToDisplay.length === 0) {
+            bookList.innerHTML = '<p class="no-books">No books found</p>';
+            return;
+        }
+
+        booksToDisplay.forEach(book => {
+            const bookCard = document.createElement('div');
+            bookCard.className = 'book-card';
+
+            // Determine book type
+            const bookType = book['@type'] || 'book';
+            const typeLabel = bookType === 'Ebook' ? 'Ebook' :
+                (bookType === 'PrintedBook' ? 'Printed Book' : 'Book');
+
+            // Create book card
+            bookCard.innerHTML = `
+                    <div class="book-header">
+                        <div class="book-title">${book.title}</div>
+                        <div class="book-type">${typeLabel}</div>
+                    </div>
+                    ${book.coverPage ? `<img src="${book.coverPage}" alt="Book Cover" class="book-cover">` : ''}
+                    <div class="book-details">
+                        <p><strong>Author:</strong> ${book.author}</p>
+                        <p><strong>ISBN:</strong> ${book.isbn}</p>
+                        <p><strong>Genre:</strong> ${book.genre}</p>
+                        <p><strong>Pages:</strong> ${book.noPages}</p>
+                        <p><strong>Price:</strong> $${book.price.toFixed(2)}</p>
+                        ${book.fileSize? `
+                            <p><strong>File Size:</strong> ${book.fileSize}MB</p>
+                            <p><strong>Location:</strong> ${book.fileLocation}</p>
+                        ` : ''}
+                        ${bookType==="PrintedBook"?`
+                        <p><strong>availableStock:</strong> ${book.availableStock}</p>`:""}
+                    </div>
+                    <div class="book-actions">
+                        <button class="btn primary edit-btn" data-id="${book.bookId}">Edit</button>
+                        <button class="btn secondary delete-btn" data-id="${book.bookId}">Delete</button>
+                    </div>
+                `;
+
+            bookList.appendChild(bookCard);
+        });
+
+        // Add event listeners to buttons
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.addEventListener('click', () => loadBookForEdit(btn.dataset.id));
+        });
+
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', () => deleteBook(btn.dataset.id));
+        });
+    }
+
+    function filterBooks() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const filteredBooks = books.filter(book =>
+            book.title.toLowerCase().includes(searchTerm) ||
+            book.author.toLowerCase().includes(searchTerm) ||
+            book.isbn.toLowerCase().includes(searchTerm) ||
+            book.genre.toLowerCase().includes(searchTerm)
+        );
+        displayBooks(filteredBooks);
+    }
+
+    async function loadBookForEdit(bookId) {
+        try {
+            const response = await fetch(`http://localhost:8080/book/${bookId}`);
+            if (!response.ok) throw new Error('Failed to fetch book');
+
+            const book = await response.json();
+            editingBookId = book.bookId;
+
+            // Fill the form
+            document.getElementById('bookId').value = book.bookId;
+            document.getElementById('title').value = book.title;
+            document.getElementById('author').value = book.author;
+            document.getElementById('isbn').value = book.isbn;
+            document.getElementById('publishedDate').value = formatDateForInput(book.publishedDate);
+            document.getElementById('genre').value = book.genre;
+            document.getElementById('noPages').value = book.noPages;
+            document.getElementById('price').value = book.price;
+            document.getElementById('coverPage').value = book.coverPage || '';
+
+            // Set book type
+            const bookType = book['@type'] || 'book';
+            document.getElementById('bookType').value = bookType;
+
+            // Set ebook fields if needed
+            if (bookType === 'Ebook') {
+                document.getElementById('fileSize').value = book.fileSize;
+                document.getElementById('fileLocation').value = book.fileLocation;
+            }
+
+            toggleEbookFields();
+
+            // Scroll to form
+            document.querySelector('.book-form').scrollIntoView({ behavior: 'smooth' });
+        } catch (error) {
+            console.error('Error loading book for edit:', error);
+            alert('Error loading book for editing. Please check console for details.');
+        }
+    }
+
+    function formatDateForInput(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        return date.toISOString().split('T')[0];
+    }
+
+    async function handleFormSubmit(e) {
+        e.preventDefault();
+
+
+        const bookType = document.getElementById('bookType').value;
+        const bookData = {
+            bookId: editingBookId ? parseInt(editingBookId) : undefined,
+            title: document.getElementById('title').value,
+            author: document.getElementById('author').value,
+            isbn: document.getElementById('isbn').value,
+            publishedDate: document.getElementById('publishedDate').value,
+            genre: document.getElementById('genre').value,
+            noPages: parseInt(document.getElementById('noPages').value),
+            price: parseFloat(document.getElementById('price').value),
+            coverPage: document.getElementById('coverPage').value,
+            "@type": bookType === 'Ebook' ? 'Ebook' : (bookType === 'PrintedBook' ? 'PrintedBook' : 'Ebook')
+        };
+
+        // Add ebook specific fields if needed
+        if (bookType === 'Ebook') {
+            bookData.fileSize = parseFloat(document.getElementById('fileSize').value);
+            bookData.fileLocation = document.getElementById('fileLocation').value;
+        }
+        if(bookType==='PrintedBook'){
+            bookData.availableStock = parseInt(document.getElementById("").value);
+        }
+
+        try {
+            let response;
+            if (editingBookId) {
+                // Update existing book
+                response = await fetch('http://localhost:8080/book/update', {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(bookData)
+                });
+            } else {
+                // Add new book
+                response = await fetch('http://localhost:8080/book/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(bookData)
+                });
+            }
+
+            if (!response.ok) throw new Error(editingBookId ? 'Failed to update book' : 'Failed to add book');
+
+            const result = await response.json();
+            if (result) {
+                alert(`Book ${editingBookId ? 'updated' : 'added'} successfully!`);
+                resetForm();
+                loadBooks();
+            }
+        } catch (error) {
+            console.error('Error saving book:', error);
+            alert(`Error ${editingBookId ? 'updating' : 'adding'} book. Please check console for details.`);
+        }
+    }
+
+    async function deleteBook(bookId) {
+        if (!confirm('Are you sure you want to delete this book?')) return;
+
+        try {
+            const response = await fetch(`http://localhost:8080/book/delete/${bookId}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) throw new Error('Failed to delete book');
+
+            const result = await response.json();
+            if (result) {
+                alert('Book deleted successfully!');
+                loadBooks();
+            }
+        } catch (error) {
+            console.error('Error deleting book:', error);
+            alert('Error deleting book. Please check console for details.');
+        }
+    }
+
+    function resetForm() {
+        bookForm.reset();
+        editingBookId = null;
+        document.getElementById('bookId').value = '';
+        ebookFields.classList.add('hidden');
+    }
+</script>
+</body>
+</html>

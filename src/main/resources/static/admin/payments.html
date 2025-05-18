@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ebooky3 - Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/user.css">
+</head>
+<body>
+<!-- Navigation Bar -->
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#"><i class="bi bi-book"></i> <span>E-booky</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link active" href="index.html"><i class="bi bi-house-door"></i> Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="book.html"><i class="bi bi-book"></i> Books</a></li>
+                <li class="nav-item"><a class="nav-link" href="user.html"><i class="bi bi-people"></i> Users</a></li>
+                <li class="nav-item"><a class="nav-link" href="payments.html"><i class="bi bi-people"></i> Payments</a></li>
+                <li class="nav-item"><a class="nav-link" href="reservation.html"><i class="bi bi-people"></i> Reservation</a></li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-bell"></i></a></li>
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear"></i></a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle"></i> Admin
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <header class="my-4 text-center">
+
+
+    </header>
+
+    <div class="row">
+        <div class="container mt-4">
+            <div class="tab-content">
+                <!-- Users Tab -->
+                <div class="tab-pane fade show active" id="usersTab">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h3>User Management</h3>
+                            <input type="search" id="search-input">
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Book</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="userTableBody1">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const purchasingContainer = document.getElementById("userTableBody1");
+    let paymentList = [];
+
+    // Sample JavaScript for demonstration
+    document.addEventListener('DOMContentLoaded', async function() {
+
+        async function  loadpayments() {
+            let payments = [];
+            const response = await fetch("/purchasing");
+            if(!response.ok) throw new Error('Failed to fetch books');
+
+            payments = await response.json();
+            paymentList = payments;
+            displaypayments(payments);
+        }
+
+        await loadpayments();
+
+        document.getElementById("search-input").addEventListener("input", (e) => {
+            const text = e.target.value.toLowerCase();
+
+            // Filter paymentList by user name or book title
+            const filteredPayments = paymentList.filter(payment => {
+                const fullName = `${payment.purchaseUser.firstName} ${payment.purchaseUser.lastName}`.toLowerCase();
+                const bookTitle = payment.purchaseBook.title.toLowerCase();
+                return fullName.includes(text) || bookTitle.includes(text);
+            });
+
+            displaypayments(filteredPayments);
+        });
+    });
+
+    function displaypayments(payments) {
+        purchasingContainer.innerText = "";
+        payments.forEach(payment=>{
+            const element = `<tr>
+                                        <td>${payment.purchaseId}</td>
+                                        <td>${payment.purchaseUser.firstName} ${payment.purchaseUser.lastName}</td>
+                                        <td>${payment.purchaseBook.title}</td>
+                                        <td>${payment.purchaseBook.price}</td>
+                                        <td>${getDateTime(payment.purchaseDate)}</td>
+                                        </tr>`;
+            purchasingContainer.innerHTML += element;
+        })
+    }
+
+    function getDateTime(timestamp) {
+        const date = new Date(timestamp);
+
+        // Format as YYYY-MM-DD HH:mm:ss
+        return date.getFullYear() + "-" +
+            String(date.getMonth() + 1).padStart(2, '0') + "-" +
+            String(date.getDate()).padStart(2, '0') + " " +
+            String(date.getHours()).padStart(2, '0') + ":" +
+            String(date.getMinutes()).padStart(2, '0') + ":" +
+            String(date.getSeconds()).padStart(2, '0');
+
+        console.log("Formatted date:", formattedDate);
+
+    }
+</script>
+</body>
+</html>

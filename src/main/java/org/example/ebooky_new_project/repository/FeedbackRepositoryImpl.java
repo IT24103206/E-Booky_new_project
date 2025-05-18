@@ -7,15 +7,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FeedbackRepositoryImpl implements FeedbackRepository {
+public class FeedbackRepositoryImpl implements FeedbackRepository{
     private final File file = new File("feedback.txt");
     private final ObjectMapper mapper = new ObjectMapper();
-
-    public FeedbackRepositoryImpl() {
-        if (!file.exists()) {
+    public FeedbackRepositoryImpl(){
+        if(!file.exists()){
             try {
                 file.createNewFile();
-            } catch (Exception ex) {
+            }catch (Exception ex){
                 ex.printStackTrace();
             }
         }
@@ -57,3 +56,4 @@ public class FeedbackRepositoryImpl implements FeedbackRepository {
         return false;
     }
 }
+
