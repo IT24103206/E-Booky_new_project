@@ -17,19 +17,40 @@ public class BookController {
     public BookController() {this.bookService = new BookServiceImpl();}
 
     @GetMapping("/book/{id}")
-    public Book getBook(@PathVariable int id, Model model) { return bookService.getBook(id);}
+    public Book getBook(@PathVariable int id) { return bookService.getBook(id);}
+
+    @GetMapping("/book")
+    public Book getBook(@RequestParam String title){
+        return bookService.getBook(title);
+    }
 
     @GetMapping("/books")
-    public List<Book> getAllBook(){return bookService.getAllBook();}
+    public List<Book> getAllBook(
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false, defaultValue = "true") boolean ascending
+    ){
+        List<Book> books = bookService.getAllBook();
+
+        if (sort != null) {
+            books = bookService.sortBook(books, sort, ascending);
+        }
+
+        return books;
+    }
 
     @PostMapping("/book/add")
-    public Optional<Book> saveBook(@RequestBody Book book) { return bookService.saveBook(book);}
+    public Optional<Book> saveBook(@RequestBody Book book){
+        return bookService.saveBook(book);
+    }
 
     @PatchMapping("/book/update")
-    public Optional<Book> updateBook(@RequestBody Book book) { return bookService.updateBook(book);}
+    public Optional<Book> updateBook(@RequestBody Book book){
+        return bookService.updateBook(book);
+    }
 
     @DeleteMapping("/book/delete/{id}")
-    public boolean deleteBook(@PathVariable int id) {return bookService.deleteBook(id);}
-
+    public boolean deleteBook(@PathVariable int id){
+        return bookService.deleteBook(id);
+    }
 }
 
