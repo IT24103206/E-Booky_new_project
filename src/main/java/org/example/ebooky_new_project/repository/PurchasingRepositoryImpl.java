@@ -1,6 +1,7 @@
 package org.example.ebooky_new_project.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.ebooky_new_project.model.PrintedBook;
 import org.example.ebooky_new_project.model.Purchasing;
 
 import java.io.File;
