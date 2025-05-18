@@ -22,6 +22,8 @@ public class PurchasingRepositoryImpl implements PurchasingRepository {
         }
     }
 
+
+
     @Override
     public List<Purchasing> getAllPurchasing() {
         List<Purchasing> purchasingList = new ArrayList<>();
@@ -37,20 +39,24 @@ public class PurchasingRepositoryImpl implements PurchasingRepository {
 
     @Override
     public Purchasing addPurchasing(Purchasing purchasing) {
+        System.out.println("Adding Done");
         List<Purchasing> purchasingList = getAllPurchasing();
-        if(purchasing.getPurchaseBook() instanceof PrintedBook){
-            int bookCount = ((PrintedBook) purchasing.getPurchaseBook()).getAvailableStock();
-            ((PrintedBook) purchasing.getPurchaseBook()).setAvailableStock(bookCount-purchasing.getQuantity());
-            bookRepository.updateBook(purchasing.getPurchaseBook());
-        }
+//        if(purchasing.getPurchaseBook() instanceof PrintedBook){
+//            int bookCount = ((PrintedBook) purchasing.getPurchaseBook()).getAvailableStock();
+//            ((PrintedBook) purchasing.getPurchaseBook()).setAvailableStock(bookCount-purchasing.getQuantity());
+//            bookRepository.updateBook(purchasing.getPurchaseBook());
+//        }
         ObjectMapper mapper = new ObjectMapper();
         purchasingList.add(purchasing);
         try{
             mapper.writeValue(file,purchasingList);
+            System.out.println(purchasing.getPurchaseBook().getBookId());
             return purchasing;
         }catch (Exception ex){
             ex.printStackTrace();
+            System.out.println(ex);
         }
+
         return null;
     }
 
@@ -61,10 +67,8 @@ public class PurchasingRepositoryImpl implements PurchasingRepository {
 
     @Override
     public boolean deletePurchasing(int id) {
-
         return false;
     }
-
 
 
 }

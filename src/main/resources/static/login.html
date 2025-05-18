@@ -66,7 +66,7 @@
         <!-- Login Form -->
         <div class="form-box active" id="login-form">
             <form id="login-form1">
-                <h2>Welcome Back</h2>
+                <h2>Login E-Booky</h2>
                 <input type="email"  placeholder="Email" id="login-email" required />
                 <input
                         type="password"
@@ -147,9 +147,9 @@
                 localStorage.setItem("currentUser",JSON.stringify(data));
                 console.log(JSON.parse(localStorage.getItem("currentUser")))
                 if(data && data.adminRole){
-                    window.location.href = "/admin/index.html"
-                    return;
-                }
+                     window.location.href = "/admin/index.html"
+                     return;
+                 }
                 window.location.href = "/shop.html";
 
             }else {

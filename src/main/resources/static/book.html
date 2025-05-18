@@ -121,7 +121,7 @@
         const params = new URLSearchParams(window.location.search);
         const title = params.get('title');
 
-        const response = await fetch(/book?title=${encodeURIComponent(title)});
+        const response = await fetch(`/book?title=${encodeURIComponent(title)}`);
 
         if (!response.ok) {
             console.error("Failed to load book data");
@@ -189,13 +189,13 @@
         });
 
         if(!response.ok){
-            alert(Buying eBook: "${book.title}" Error);
+            alert(`Buying eBook: "${book.title}" Error`);
             return;
         }
 
         const data = await response.json();
         // You can send this data to a server or redirect
-        alert(Reserved "${book.title}" for date: ${selectedDate});
+        alert(`Reserved "${book.title}" for date: ${selectedDate}`);
         // Example: redirect to confirmation
         window.location.href = "/shop.html";
     }
@@ -224,13 +224,13 @@
         });
 
         if(!response.ok){
-            alert(Buying eBook: "${book.title}" Error);
+            alert(`Buying eBook: "${book.title}" Error`);
             return;
         }
 
         const data = await response.json();
         console.log(data);
-        alert(Buying eBook: "${book.title}" Purchasing Done);
+        alert(`Buying eBook: "${book.title}" Purchasing Done`);
         window.location.href = "/shop.html";
     }
 </script>

@@ -1,6 +1,19 @@
 package org.example.ebooky_new_project.model;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import java.util.Date;
+
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,  // use name to identify types
+        include = JsonTypeInfo.As.PROPERTY,  // add a property named "@type"
+        property = "@type"
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = PrintedBook.class, name = "PrintedBook"),
+        @JsonSubTypes.Type(value = Ebook.class, name = "Ebook")
+})
 
 public class Book {
     private int bookId;
