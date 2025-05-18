@@ -26,7 +26,7 @@ public class UserController {
         return userService.saveUser(user);
     }
 
-    @PostMapping("user/login")
+    @PostMapping("/user/login")
     public Optional<User> loginUser(@RequestBody LoginRequest loginRequest) {
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();

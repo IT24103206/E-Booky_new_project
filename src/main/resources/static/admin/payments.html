@@ -1,3 +1,4 @@
+<script src="adminCheck.js"></script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -98,6 +99,7 @@
 
             payments = await response.json();
             paymentList = payments;
+            console.log(payments);
             displaypayments(payments);
         }
 
@@ -122,7 +124,7 @@
         payments.forEach(payment=>{
             const element = `<tr>
                                         <td>${payment.purchaseId}</td>
-                                        <td>${payment.purchaseUser.firstName} ${payment.purchaseUser.lastName}</td>
+                                        <td>${payment.purchaseUser.email}</td>
                                         <td>${payment.purchaseBook.title}</td>
                                         <td>${payment.purchaseBook.price}</td>
                                         <td>${getDateTime(payment.purchaseDate)}</td>

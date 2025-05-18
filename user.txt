@@ -1,6 +1,7 @@
-{"@type":"AdminUser","userId":1,"firstName":"venushi","lastName":"jayananda","email":"venujaya@gmail.com","password":"venushi12345","adminRole":"userManagement"}
+{"@type":"RegularUser","userId":1,"firstName":"venushi","lastName":"jayananda","email":"ranmg@gmail.com","password":"dfgftry576"}
 {"@type":"RegularUser","userId":2,"firstName":"kavindi","lastName":"rajamanthree","email":"kavindi@gmail.com","password":"2468abcd"}
 {"@type":"RegularUser","userId":3,"firstName":"dinali","lastName":"ahangama","email":"dinali@gmail.com","password":"1234"}
 {"@type":"RegularUser","userId":4,"firstName":"dinuri","lastName":"wickkramarathne","email":"dinuri@gmail.com","password":"246"}
 {"@type":"RegularUser","userId":5,"firstName":"venushi","lastName":"jayananda","email":"dinuri@gmail.com","password":"246"}
 {"@type":"RegularUser","userId":6,"firstName":"venushi","lastName":"jayananda","email":"dinuri@gmail.com","password":"1234"}
+{"@type":"AdminUser","userId":7,"firstName":"Admin","lastName":"Admin","email":"Admin123@gmail.com","password":"Admin123","adminRole":"userManagement"}
