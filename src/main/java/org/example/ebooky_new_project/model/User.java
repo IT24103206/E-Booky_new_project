@@ -1,17 +1,5 @@
 package org.example.ebooky_new_project.model;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
-@JsonTypeInfo(
-        use = JsonTypeInfo.Id.NAME,      // use a NAME (like "admin" or "regular")
-        include = JsonTypeInfo.As.PROPERTY,
-        property = "@type"               // property will be "@type"
-)
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = AdminUser.class, name = "AdminUser"),
-        @JsonSubTypes.Type(value = RegularUser.class, name = "RegularUser")
-})
 public abstract class User {
     private int userId;
     private String firstName;
