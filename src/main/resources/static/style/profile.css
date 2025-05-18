@@ -1,0 +1,77 @@
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),url('./img/front12.png');
+    min-height: 100vh;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-family: 'Lato', sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+.container {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 30px;
+    margin-top: 100px;
+    margin-bottom: 50px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    flex: 1;
+}
+h1.poppins {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    color: #333;
+}
+h2 {
+    color: #444;
+    margin-bottom: 20px;
+}
+.form-group {
+    margin-bottom: 20px;
+}
+label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+}
+.form-control {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    width: 100%;
+}
+.unique-button {
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+.unique-button:hover {
+    background-color: #0b5ed7;
+}
+
+.footer {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #000; /* Changed to black */
+    padding: 15px 0; /* Reduced height */
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+}
+.footer a {
+    color: #000; /* Changed to black */
+    text-decoration: none;
+}
+.footer a:hover {
+    color: #0d6efd;
+}
+.footer-container {
+    max-width: 1200px; /* Same as laptop width */
+    margin: 0 auto;
+    padding: 0 15px;
+}
