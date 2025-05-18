@@ -27,6 +27,9 @@ public class Book {
         this.coverPage = coverPage;
     }
 
+    public Book(int bookId, String title, String author, String isbn, Date publishedDate, String genre, String description, int noPages, double price, String coverPage) {
+    }
+
     public int getBookId() { return bookId; }
     public void setBookId(int bookId) { this.bookId = bookId; }
 
