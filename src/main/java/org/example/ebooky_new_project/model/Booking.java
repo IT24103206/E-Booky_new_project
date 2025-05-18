@@ -1,7 +1,6 @@
 package org.example.ebooky_new_project.model;
 
 import java.util.Date;
-
 public class Booking {
     private int bookingId;
     private PrintedBook book;
