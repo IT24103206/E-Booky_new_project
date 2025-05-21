@@ -1,30 +1,29 @@
 package org.example.ebooky_new_project.repository;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.ebooky_new_project.model.Book;
+import org.example.ebooky_new_project.model.BookLinkedList;
 
 import java.io.*;
-import java.util.LinkedList;
 import java.util.List;
 
-public class BookRepositoryImpl implements BookRepository{
+public class BookRepositoryImpl implements BookRepository {
 
-    private File file = new File("book.txt");
+    private final File file = new File("book.txt");
     private final ObjectMapper objectMapper;
 
-    public BookRepositoryImpl(){
+    public BookRepositoryImpl() {
         this.objectMapper = new ObjectMapper();
         objectMapper.activateDefaultTyping(
                 objectMapper.getPolymorphicTypeValidator(),
                 ObjectMapper.DefaultTyping.JAVA_LANG_OBJECT,
                 JsonTypeInfo.As.PROPERTY
         );
-        if(!file.exists()){
+        if (!file.exists()) {
             try {
                 file.createNewFile();
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
@@ -32,36 +31,36 @@ public class BookRepositoryImpl implements BookRepository{
 
     @Override
     public List<Book> getAllBook() {
-        List<Book> books = new LinkedList<>();
-        try(BufferedReader br = new BufferedReader(new FileReader(file))){
+        BookLinkedList bookLinkedList = new BookLinkedList();
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
                 Book book = objectMapper.readValue(line, Book.class);
-                books.add(book);
+                bookLinkedList.add(book);
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return books;
+        return bookLinkedList.toList();
     }
 
     @Override
     public Book saveBook(Book book) {
         List<Book> books = getAllBook();
         int id = 1;
-        if(books.size()>0){
-            id = books.get(books.size()-1).getBookId()+1;
+        if (!books.isEmpty()) {
+            id = books.get(books.size() - 1).getBookId() + 1;
         }
         book.setBookId(id);
-        books.add(book);
 
-        try(FileWriter fw = new FileWriter(file,true);
-            PrintWriter pw = new PrintWriter(fw)){
+        try (FileWriter fw = new FileWriter(file, true);
+             PrintWriter pw = new PrintWriter(fw)) {
 
             String json = objectMapper.writeValueAsString(book);
             pw.println(json);
             return book;
-        }catch (Exception ex){
+
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return null;
@@ -70,56 +69,53 @@ public class BookRepositoryImpl implements BookRepository{
     @Override
     public Book updateBook(Book book) {
         List<Book> bookList = getAllBook();
-        boolean isFind = false;
-        try{
+        BookLinkedList bookLinkedList = new BookLinkedList();
 
-            ObjectMapper objectMapper = new ObjectMapper();
+        boolean isUpdated = false;
 
-            for (Book b:bookList){
-                if(b.getBookId() == book.getBookId()){
-                    b.setTitle(book.getTitle());
-                    b.setAuthor(book.getAuthor());
-                    b.setGenre(book.getGenre());
-                    b.setIsbn(book.getIsbn());
-                    b.setCoverPage(book.getCoverPage());
-                    b.setNoPages(book.getNoPages());
-                    b.setPrice(book.getPrice());
-                    b.setPublishedDate(book.getPublishedDate());
-                    isFind = true;
-                    break;
-                }
+        for (Book b : bookList) {
+            if (b.getBookId() == book.getBookId()) {
+                b.setTitle(book.getTitle());
+                b.setAuthor(book.getAuthor());
+                b.setGenre(book.getGenre());
+                b.setIsbn(book.getIsbn());
+                b.setCoverPage(book.getCoverPage());
+                b.setNoPages(book.getNoPages());
+                b.setPrice(book.getPrice());
+                b.setPublishedDate(book.getPublishedDate());
+                isUpdated = true;
             }
-            if(isFind){
-                saveAllBooks(bookList);
-                return book;
-            }
-        }catch (Exception ex){
-            ex.printStackTrace();
+            bookLinkedList.add(b);
         }
+
+        if (isUpdated) {
+            saveAllBooks(bookLinkedList.toList());
+            return book;
+        }
+
         return null;
     }
 
     @Override
     public Boolean deleteBook(int id) {
-        List<Book> books = getAllBook();
-        boolean isRemoved = false;
-        try {
-            // Remove book with matching ID
-            for (Book b : books) {
-                if (b.getBookId() == id) {
-                    books.remove(b);
-                    isRemoved = true;
-                    break;
-                }
-            }
+        List<Book> bookList = getAllBook();
+        BookLinkedList bookLinkedList = new BookLinkedList();
 
-            if (isRemoved) {
-                saveAllBooks(books);
-                return true;
+        boolean isDeleted = false;
+
+        for (Book b : bookList) {
+            if (b.getBookId() != id) {
+                bookLinkedList.add(b);
+            } else {
+                isDeleted = true;
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
+
+        if (isDeleted) {
+            saveAllBooks(bookLinkedList.toList());
+            return true;
+        }
+
         return false;
     }
 
@@ -127,12 +123,10 @@ public class BookRepositoryImpl implements BookRepository{
         try (FileWriter fw = new FileWriter(file, false);
              PrintWriter pw = new PrintWriter(fw)) {
 
-            for (Book book :books) {
+            for (Book book : books) {
                 String json = objectMapper.writeValueAsString(book);
-                pw.println(json);  // Write each user on a new line
+                pw.println(json);
             }
-
-            System.out.println("All users saved successfully!");
 
         } catch (Exception ex) {
             ex.printStackTrace();
